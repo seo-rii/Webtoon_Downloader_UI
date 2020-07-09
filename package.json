@@ -1,0 +1,51 @@
+{
+  "name": "webtoon-downloader",
+  "version": "0.0.1",
+  "description": "Webtoon Downloader",
+  "main": "index.js",
+  "scripts": {
+    "dist": "electron-builder",
+    "run": "electron index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/04SeoHyun/Webtoon_Downloader_UI.git"
+  },
+  "author": "Seohyun Lee <04seohyun@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/04SeoHyun/Webtoon_Downloader_UI/issues"
+  },
+  "build": {
+    "productName": "Webtoon Downloader",
+    "appId": "youtil.webtoon.downloader",
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "extraFiles": [
+        "download.exe"
+      ],
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./res/logo.ico"
+    },
+    "portable": {
+      "artifactName": "Webtoon_Downloader.exe"
+    }
+  },
+  "homepage": "https://github.com/04SeoHyun/Webtoon_Downloader_UI#readme",
+  "dependencies": {
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "electron": "^8.3.4",
+    "electron-builder": "^22.7.0"
+  }
+}
