@@ -1,0 +1,32 @@
+# .travis.yml
+language: node_js
+
+node_js:
+  - "lts/*"
+
+os: windows
+
+branches:
+  only:
+    - master
+
+before-install:
+  - Invoke-WebRequest https://github.com/04SeoHyun/Webtoon_Downloader/releases/download/3.3.4/Webtoon_Downloader_3_3_4.exe -OutFile downloader.exe
+
+install:
+  - npm install
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
+
+script:
+  - npm run-script dist
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: build/Webtoon_Downloader.exe
+  skip_cleanup: true
