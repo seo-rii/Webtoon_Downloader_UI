@@ -1,0 +1,63 @@
+#titlebar {
+    background: #005026;
+    color: #ffffff;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: #222222;
+    color: #ffffff;
+    border: 1px solid #005026;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+.card:hover {
+    background: #333333;
+    transition: all .3s;
+}
+
+a {
+    color: white;
+}
+
+#section {
+    background: #222222;
+}
+
+#section div div {
+    color: white;
+    transition: all .3s;
+}
+
+#section div div.sel {
+    background-color: #005026;
+    color: white;
+}
+
+.slider:before {
+    background-color: #222222;
+}
+
+.form__field {
+    color: #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+#episodeName {
+    background: #222222;
+}
+
+#section::-webkit-scrollbar-thumb {
+    background: #005026;
+}
+
+.card .prog {
+    background: #444444;
+}
+
+.card .prog div {
+    background: floralwhite;
+}

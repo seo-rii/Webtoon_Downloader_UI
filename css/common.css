@@ -1,0 +1,59 @@
+#toast {
+    position: fixed;
+    z-index: 1;
+    top: 100%;
+    background: #555555;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 80%;
+    left: 10%;
+    height: 40px;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    transition: margin-top .2s cubic-bezier(.74, 0, .24, 1);
+}
+
+#lists {
+    margin-top: 40px;
+}
+
+#menu {
+    width: 100%;
+    padding: 10px;
+}
+
+#menu h2 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.slidecontainer {
+    width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none; /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 5px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #827397;
+    cursor: pointer;
+}
