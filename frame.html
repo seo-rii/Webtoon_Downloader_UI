@@ -5,6 +5,8 @@
     <link href="./css/frameLess.css" rel="stylesheet" type="text/css">
     <link href="./css/common.css" rel="stylesheet" type="text/css">
     <link href="./css/card.css" rel="stylesheet" type="text/css">
+    <link href="./css/input.css" rel="stylesheet" type="text/css">
+    <link href="./css/search.css" rel="stylesheet" type="text/css">
     <link id="theme" rel="stylesheet" type="text/css">
 </head>
 
@@ -39,7 +41,7 @@
 
 <div id="main">
     <div style="height:calc(100vh - 32px);calc(100vw - 32px);display: flex;align-items: center;justify-content: center;">
-        <img src="logo.png" style="width:200px;height: 200px;">
+        <img src="res/logo.png" style="width:200px;height: 200px;">
     </div>
 </div>
 <div id="scripts"></div>
@@ -67,10 +69,8 @@
     loadTheme();
 
     const fs = require('fs');
-    const {promisify} = require('util');
     const path = require('path');
     const {spawn, execSync} = require('child_process');
-    const readFile = promisify(fs.readFile);
     const urlParams = new URLSearchParams(window.location.search);
     const locale = urlParams.get('locale');
 
@@ -80,7 +80,14 @@
     async function loadHTML(html) {
         if (updatingFrame) return;
         updatingFrame = true;
-        const render = await readFile(path.join(__dirname, 'frame', locale, html), 'utf-8');
+        let render;
+        try {
+            render = fs.readFileSync(path.join(__dirname, 'frame', locale, html), {encoding: 'utf8', flag: 'r'});
+        } catch (e) {
+            showToast('오류가 발생했습니다 :(', '프로그램 재시작', 'restart');
+            updatingFrame = false;
+            return;
+        }
         const parser = new DOMParser();
         const childrenArray = parser.parseFromString(render, 'text/html').querySelector('body').childNodes;
         nextMainEl = document.createElement('DIV');
@@ -131,26 +138,46 @@
         if (isToastShowing) delay = 300;
         document.getElementById('toast').style.marginTop = '0px';
         setTimeout(() => {
-            document.getElementById('toast').innerText = msg;
+            document.getElementById('toast').innerHTML = msg;
             document.getElementById('toast').style.marginTop = '-40px';
             isToastShowing = true;
             setTimeout(() => {
                 if (currentStat !== nowStat) return;
                 document.getElementById('toast').style.marginTop = '0px';
                 isToastShowing = false;
-            }, 5000);
+            }, 7000);
         }, delay);
     }
 
-    function showToast(msg) {
+    function showToast(msg, customMsg = '닫기', customEvent = 'closeToast();') {
         ++currentStat;
-        toastWorker(msg, currentStat);
+        toastWorker(msg + ` <span style="float: right" onclick="${customEvent}">${customMsg}</span>`, currentStat);
     }
 
+    function closeToast() {
+        document.getElementById('toast').style.marginTop = '0px';
+        isToastShowing = false;
+    }
+
+    function init() {
+        loadHTML('index.html');
+        showToast('경고 : 다운로드한 웹툰을 인터넷상으로 공유하는 행위는 저작권법을 위반하는 행위입니다.');
+    }
 
     setTimeout(() => {
-        loadHTML('index.html');
+        init();
     }, 500);
+
+    function restart() {
+        loadedPage = {};
+        updatingFrame = false;
+        require('electron').ipcRenderer.send('restart');
+    }
+
+    window.onerror = function errorHandler(errorMsg, url, lineNumber) {
+        showToast('오류가 발생했습니다 :(', '프로그램 재시작', 'restart');
+        return false;
+    }
 </script>
 </body>
 </html>

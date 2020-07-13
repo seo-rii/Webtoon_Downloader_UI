@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<body>
+<div class="section">
+    <p id="id"></p>
+</div>
+<script>
+    function setDetail_init() {
+        document.getElementById('id').innerText = webtoonId;
+        setTimeout(() => {
+            loadHTML('index.html');
+        }, 1000);
+        throw new Error();
+    }
+</script>
+</body>
+</html>

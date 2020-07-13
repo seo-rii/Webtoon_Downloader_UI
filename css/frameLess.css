@@ -53,23 +53,23 @@ body {
 }
 
 #main {
-    height: calc(100% - 32px);
     margin-top: 31px;
+    margin-left: 0;
     overflow-y: auto;
     left: 0;
     opacity: 1;
-    transition: all 1s;
+    transition: all .3s ease-out;
 }
 
 #main.hiddenContent {
-    margin-top: 50px;
+    margin-left: 10px;
     opacity: 0 !important;
-    transition: all 1s;
+    transition: all .3s ease-out;
 }
 
 #main.hideContent {
     height: calc(100% - 6px);
-    margin-top: 5px;
+    margin-left: -50px;
     margin-bottom: 10px;
     opacity: 0 !important;
     transition: all .5s ease-in;
@@ -208,13 +208,13 @@ body {
 .fullscreened.hideTitlebar #titlebar {
     position: fixed;
     top: -32px !important;
-    transition: top 0.3s;
+    transition: top 0.3s ease-out;
 }
 
 .fullscreened.showTitlebar #titlebar {
     position: fixed;
     top: 0px !important;
-    transition: top 0.3s;
+    transition: top 0.3s ease-out;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -222,9 +222,19 @@ body {
     height: calc(100%);
     margin-top: 0;
     overflow-y: auto;
-    transition: all 0.3s;
+    transition: all 0.3s ease-out;
 }
 
 * {
     transition: background .5s;
+}
+
+.section {
+    margin-top: calc(50vh - 32px);
+    float: left;
+    transform: translateY(-50%);
+}
+
+.click {
+    cursor: pointer;
 }

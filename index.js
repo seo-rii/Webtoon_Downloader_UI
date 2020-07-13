@@ -1,7 +1,16 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
 
 let win;
+
+ipcMain.on('restart', () => {
+    if (win) {
+        win.loadURL('');
+        setTimeout(() => {
+            win.loadURL(getFramePath());
+        }, 500);
+    }
+});
 
 function getFramePath(resName) {
     let locale = app.getLocale();
@@ -12,7 +21,7 @@ function getFramePath(resName) {
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 800, height: 600, webPreferences: {
+        width: 900, height: 600, webPreferences: {
             nodeIntegration: true,
             webSecurity: false
         }, icon: path.join(__dirname, 'logo.ico'), frame: false

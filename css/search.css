@@ -1,0 +1,49 @@
+#searchListCont {
+    transition: all .5s;
+    width: calc(100vw - 4px);
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 0;
+    height: 70px;
+    opacity: 0;
+}
+
+#searchListCont.open {
+    transition: all .5s;
+    padding: 10px 10px 70px;
+    height: 216px;
+    opacity: 1;
+}
+
+.scroll_down {
+    position: relative;
+    left: calc(100% - 70px);
+    top: -170px;
+    width: 50px;
+    height: 50px;
+    background: #00D465;
+    color: white;
+    padding: 8px 17px 10px;
+    font-size: 30px;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.scroll_up {
+    position: relative;
+    left: 20px;
+    top: -220px;
+    width: 50px;
+    height: 50px;
+    background: #00D465;
+    color: white;
+    padding: 8px 17px 10px;
+    font-size: 30px;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.hide {
+    transition: opacity .5s;
+    opacity: 0;
+}

@@ -61,3 +61,8 @@ a {
 .card .prog div {
     background: floralwhite;
 }
+
+#toast {
+    color: #FFFFFF;
+    background: #005026;
+}

@@ -1,31 +1,72 @@
+
 .card {
-    height: 80px;
-    width: calc(100% - 30px);
-    margin: 15px;
+    float: left;
+    width: 390px;
+    height: 110px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: 10px;
+    border-radius: 10px;
+    margin: 8px 8px 8px 8px;
+    overflow: hidden;
+    transition: all .3s;
 }
 
-.card .title {
-    overflow: hidden;
+.card:hover {
+    box-shadow: 0 36px 40px 0 rgba(0, 0, 0, 0.3), 0 10px 26px 0 rgba(0, 0, 0, 0.29);
+    transition: all .3s;
+}
+
+.scard {
+    float: left;
+    width: 280px;
+    height: 50px;
+    transition: all .3s;
+}
+
+.card img {
+    height: 100%;
+    float: left;
+}
+
+.card > div {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.card h2 {
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    overflow: hidden;
 }
 
-.card .prog {
-    width: 100%;
-    height: 2px;
-    margin: 0;
-    padding: 0;
+.card p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.card .prog div {
-    width: 0;
-    height: 2px;
-    margin: 0;
-    padding: 0;
-    transition: width .5s;
+.cardInfo {
+    padding: 10px;
+    overflow: hidden;
+}
+
+* {
+    text-decoration: none;
+}
+
+.cardAppear {
+    animation: cardAppear .5s;
+}
+
+@keyframes cardAppear {
+    0% {
+        margin-left: 20px;
+        opacity: 0;
+    }
+    100% {
+        margin-left: 8px;
+        opacity: 1;
+    }
 }
