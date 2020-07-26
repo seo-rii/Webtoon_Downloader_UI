@@ -1,6 +1,7 @@
 # Webtoon_Downloader_UI
-![](logo.png =250x)
 
-UI for [04seohyun/Webtoon_Downloader](https://github.com/04seohyun/Webtoon_Downloader)
+<img alt="logo" src="./logo.png" width="250"> 
+
+UI for [Seo-Rii/Webtoon_Downloader](https://github.com/Seo-Rii/Webtoon_Downloader)
 
 Made by electron.
