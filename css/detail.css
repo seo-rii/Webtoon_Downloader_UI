@@ -54,6 +54,20 @@
     -webkit-mask-image: radial-gradient(50% 30%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)) !important;
 }
 
+.thumbnailImgD {
+    position: absolute;
+    height: 170px;
+    width: 280px;
+    opacity: 0;
+    animation-name: slideInD;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    display: inline;
+    vertical-align: top;
+    float: none;
+    clear: both;
+}
+
 @-webkit-keyframes slideIn {
     0% {
         opacity: 0;
@@ -62,6 +76,17 @@
     100% {
         opacity: 1;
         left: 32px;
+    }
+}
+
+@-webkit-keyframes slideInD {
+    0% {
+        opacity: 0;
+        left: 100px;
+    }
+    100% {
+        opacity: 1;
+        left: 0px;
     }
 }
 

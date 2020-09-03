@@ -105,7 +105,7 @@
         nextMainEl.classList.add('hiddenContent');
         nowMainEl.classList.add('hideContent');
         try {
-            window[nowPage.split('.html')[0] + '_exit']();
+            window[nowPage.split('.html')[0].split('/').reverse()[0] + '_exit']();
         } catch (e) {
 
         }
@@ -127,7 +127,7 @@
             });
             loadedPage[html] = true;
             try {
-                window[html.split('.html')[0] + '_init']();
+                window[html.split('.html')[0].split('/').reverse()[0] + '_init']();
             } catch (e) {
 
             }

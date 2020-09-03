@@ -4,12 +4,12 @@
 <div class="section">
     <div style="width:calc(80vw - 4px);margin-left: 50vw;transform: translateX(-50%);">
         <div style="width:100%;height:174px;">
-            <div style="float: left; width: 250px;height:174px;">
-                <div id="cover" style="height: 100px;">
+            <div style="float: left; width: 260px;height:170px;">
+                <div id="cover" style="height: 170px;">
                     <div id="thumbnail" style="margin:0;padding-bottom:0;bottom:0;height: 100%;"></div>
                 </div>
             </div>
-            <div style="float: left;min-width:100px;width:calc(100% - 250px);padding-left: 30px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
+            <div style="float: left;min-width:100px;width:calc(100% - 280px);padding-left: 30px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
                 <div>
                     <h3 id="webToonTitle" style="font-size: 30px;"></h3>
                     <p id="webToonText" style="font-size: 20px;"></p>
@@ -103,11 +103,11 @@
 
                 if (mergeFlag) downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'daum', webtoonId,
                         document.getElementById('saveDir').value]);
                 else downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'daum', webtoonId,
                         document.getElementById('saveDir').value]);
 
                 downloaderProcess.stdout.on('data', (data) => {
@@ -170,124 +170,73 @@
         return b;
     }
 
-    function naverDetail() {
+    function daumDetail() {
         showToast("정보를 불러오는 중...", '');
-        fetch("https://comic.naver.com/webtoon/list.nhn?titleId=" + webtoonId).then(response => {
-            response.text().then(result => {
-                const cheerio = require('cheerio');
-                const H = cheerio.load(result);
-                webtoonTitle = H('meta[property="og:title"]').attr("content")
-                let helper = H('div .detail > p').html()
-                //document.getElementById('thumbnail').src = imgurl;
+        fetch("http://webtoon.daum.net/data/pc/webtoon/view/" + webtoonId).then(response => {
+            response.json().then(result => {
+                webtoonTitle = result.data.webtoon.title;
+                let helper = result.data.webtoon.introduction;
                 document.getElementById('webToonTitle').innerHTML = webtoonTitle;
                 document.getElementById('webToonText').innerHTML = helper;
-                fetch("https://comic.naver.com/webtoon/detail.nhn?titleId=" + webtoonId + "&no=0").then(response => {
-                    response.text().then(result2 => {
-                        const H2 = cheerio.load(result2)
-                        ur = H2('meta[property="og:url"]').attr("content")
-                        if (ur == "https://comic.naver.com/main.nhn") {
-                            showToast("웹툰 ID가 올바르지 않아요!");
-                            return;
-                        }
-                        if (ur == null) {
-                            showToast("계속하려면 네이버 아이디로 로그인해야합니다.");
-                            return;
-                        }
-                        let maxEpisode = parseInt(getQueryStringObject(ur)['no']);
-                        document.getElementById('cover').style.background = '#ffffff';
-                        let range = document.getElementById('range');
-                        let speed = document.getElementById('speed');
-                        try {
+                let maxEpisode = result.data.webtoon.webtoonEpisodes.length;
+                document.getElementById('cover').style.background = '#ffffff';
 
-                            rangeSlider = noUiSlider.create(range, {
-                                start: [1, maxEpisode],
-                                connect: true,
-                                step: 1,
-                                range: {
-                                    'min': 1,
-                                    'max': maxEpisode
-                                },
-                                tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
-                            });
-                        } catch (e) {
-                            range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
-                            rangeSlider = {
-                                get: () => {
-                                    return [1, 1]
-                                }
-                            };
-                        }
+                let back = document.createElement('div');
+                back.classList.add('thumbnailBGImg');
+                back.style.background = '#' + result.data.webtoon.pcHomeLeftColor;
+                document.getElementById('thumbnail').append(back);
+                let thumb = document.createElement('img');
+                thumb.classList.add('thumbnailImgD');
+                thumb.src = result.data.webtoon.pcHomeImage.url;
+                document.getElementById('thumbnail').append(thumb);
 
-                        speedSlider = noUiSlider.create(speed, {
-                            start: [4],
-                            step: 1,
-                            range: {
-                                'min': 1,
-                                'max': 5
-                            },
-                            tooltips: {
-                                from: Number,
-                                to: (num) => {
-                                    if (num == 1) return "매우 느리게";
-                                    if (num == 2) return "느리게";
-                                    if (num == 3) return "보통";
-                                    if (num == 4) return "빠르게";
-                                    if (num == 5) return "매우 빠르게";
-                                }
-                            }
-                        });
-                        closeToast();
+                let range = document.getElementById('range');
+                let speed = document.getElementById('speed');
+                try {
+                    rangeSlider = noUiSlider.create(range, {
+                        start: [1, maxEpisode],
+                        connect: true,
+                        step: 1,
+                        range: {
+                            'min': 1,
+                            'max': maxEpisode
+                        },
+                        tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
                     });
+                } catch (e) {
+                    range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
+                    rangeSlider = {
+                        get: () => {
+                            return [1, 1]
+                        }
+                    };
+                }
+
+                speedSlider = noUiSlider.create(speed, {
+                    start: [4],
+                    step: 1,
+                    range: {
+                        'min': 1,
+                        'max': 5
+                    },
+                    tooltips: {
+                        from: Number,
+                        to: (num) => {
+                            if (num == 1) return "매우 느리게";
+                            if (num == 2) return "느리게";
+                            if (num == 3) return "보통";
+                            if (num == 4) return "빠르게";
+                            if (num == 5) return "매우 빠르게";
+                        }
+                    }
                 });
+                closeToast();
             });
         });
-        fetch('https://m.comic.naver.com/webtoon/list.nhn?titleId=' + webtoonId)
-            .then(response => {
-                response.text().then(res => {
-                    newEls = [];
-                    const parser = new DOMParser();
-                    try {
-                        maxPage = parseInt(parser.parseFromString(res, 'text/html').querySelector('.total').innerText.replace(/[^\d.]/g, ''));
-                    } catch (e) {
-                        maxPage = 1;
-                    }
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.area_thumbnail').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
-
-                    }
-                    newEls.reverse();
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.thumb_bg').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailBGImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
-
-                    }
-                    newEls.reverse();
-                    newEls.forEach(el => {
-                        document.getElementById('thumbnail').appendChild(el);
-                    })
-                });
-            });
     }
 
-    function setDetail_init() {
-        naverDetail();
+    function dSetDetail_init() {
+        daumDetail();
     }
 </script>
 </body>

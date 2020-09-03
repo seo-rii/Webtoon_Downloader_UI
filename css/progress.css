@@ -17,6 +17,7 @@
     position: relative;
     top: -10px;
     width: 0;
+    border-radius: 2px;
 }
 
 .progress::-webkit-progress-bar, progress[value]::-webkit-progress-bar {

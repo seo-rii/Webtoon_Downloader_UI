@@ -75,7 +75,7 @@
         return true;
     }
 
-    function selComic_init() {
+    function nSelComic_init() {
         getRecommend();
         setTimeout(() => {
             document.getElementById('comicSearch').focus();
@@ -92,7 +92,7 @@
                 res.list.forEach(el => {
                     try {
                         let template = document.createElement('template');
-                        template.innerHTML = `<a class="card cardAppear" href="setDetail.html" data-id="${el.titleId}">
+                        template.innerHTML = `<a class="card cardAppear" href="naver/nSetDetail.html" data-id="${el.titleId}">
     <div>
         <img src="https://shared-comic.pstatic.net/thumb/webtoon/${el.titleId}/thumbnail/${el.fileName}">
         <div class="cardInfo">
@@ -104,7 +104,7 @@
 </a>`;
                         elS.push(template.content.firstChild);
                     } catch (e) {
-                        showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('selComic.html');");
+                        showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('naver/selComic.html');");
                     }
                 });
                 let cnt = 0;
@@ -121,7 +121,7 @@
                 });
             });
         }).catch(() => {
-            showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('selComic.html');");
+            showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('naver/selComic.html');");
         });
     }
 
@@ -141,7 +141,7 @@
                     try {
                         let urlParams = new URLSearchParams(el.querySelector('a').href.split('?')[1]);
                         let template = document.createElement('template');
-                        template.innerHTML = `<a class="card" href="setDetail.html" data-id="${urlParams.get('titleId')}">
+                        template.innerHTML = `<a class="card" href="naver/nSetDetail.html" data-id="${urlParams.get('titleId')}">
     <div>
         <img src="">
         <div class="cardInfo">

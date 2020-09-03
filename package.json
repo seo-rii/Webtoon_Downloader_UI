@@ -37,7 +37,8 @@
       "icon": "./logo.ico"
     },
     "portable": {
-      "artifactName": "Webtoon_Downloader.exe"
+      "artifactName": "Webtoon_Downloader.exe",
+      "useZip": true
     }
   },
   "homepage": "https://github.com/Seo-Rii/Webtoon_Downloader_UI#readme",
