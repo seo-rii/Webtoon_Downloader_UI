@@ -35,7 +35,18 @@
             <br>
             <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운로드 속도</h2>
             <div id="speed" style="margin: 15px;"></div>
-            <h2 style="font-size: 30px;margin: 20px 10px 10px;">다운로드 옵션</h2>
+            <h2 style="font-size: 30px;margin: 20px 10px 15px;">다운로드 옵션</h2>
+            <div class="radio-group">
+                <label for="opPdf">
+                    <input checked="checked" id="opPdf" name="g1" type="radio"><span>PDF로 병합</span>
+                </label>
+                <label for="opMerge">
+                    <input id="opMerge" name="g1" type="radio"><span>이미지로 병합</span>
+                </label>
+                <label for="opBasic">
+                    <input id="opBasic" name="g1" type="radio"><span>병합하지 않기</span>
+                </label>
+            </div>
             <div>
                 <div class="btn" onclick="download();" style="width:80px;float: right;">다운로드</div>
             </div>
@@ -43,12 +54,28 @@
         <div id="downloadDetail"
              style="width:100%;margin-left:30px;opacity:0;display:none;transition: all ease-in-out .5s;">
             <br>
-            <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운로드 중...</h2>
+            <div style="height: 90px;width: 100%;">
+                <h2 id="info" style="font-size: 30px;margin: 10px 10px 45px;float: left;">초기화 중...</h2>
+                <h3 id="infoProgress"
+                    style="font-size: 20px;float: left ;margin-top: 22px;margin-left: 5px;color: #555555;"></h3>
+            </div>
+            <div class="progress-container" id="prog">
+                <div class="progressBack"></div>
+                <div class="progress"></div>
+                <div class="progress-materializecss">
+                    <div class="indeterminate"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script>
+    function showFolder() {
+        child_process.exec('start "" "' + savePath + '"');
+    }
+
     function download() {
+        savePath = document.getElementById('saveDir').value;
         document.getElementById('secondDetail').style.marginLeft = '-30px';
         document.getElementById('secondDetail').style.opacity = '0';
         setTimeout(() => {
@@ -57,11 +84,60 @@
             setTimeout(() => {
                 document.getElementById('downloadDetail').style.marginLeft = '0';
                 document.getElementById('downloadDetail').style.opacity = '1';
+
+                let dTr, mTr;
+                if (speedSlider.get() == 1) dTr = 1, mTr = 1;
+                if (speedSlider.get() == 2) dTr = 2, mTr = 2;
+                if (speedSlider.get() == 3) dTr = 4, mTr = 4;
+                if (speedSlider.get() == 4) dTr = 8, mTr = 4;
+                if (speedSlider.get() == 5) dTr = 8, mTr = 8;
+
+
+                let mcnt = 0, dcnt = 0, rcnt = 0;
+                let rprog = Math.round(rangeSlider.get()[1]) - Math.round(rangeSlider.get()[0]) + 1, prog = rprog * 2;
+
+                let mergeFlag = '';
+                if (document.getElementById('opPdf').checked) mergeFlag = '--mergeAsPdf';
+                else if (document.getElementById('opMerge').checked) mergeFlag = '--mergeAsPng';
+                else prog = rprog;
+
+                if (mergeFlag) downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
+                    ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        document.getElementById('saveDir').value]);
+                else downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
+                    ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        document.getElementById('saveDir').value]);
+
+                downloaderProcess.stdout.on('data', (data) => {
+                    console.log(data.toString());
+                    document.getElementById('prog').querySelector('.progress-materializecss').style.opacity = '0';
+                    dcnt = dcnt + ((data.toString().match(/d/g) || []).length);
+                    mcnt = mcnt + ((data.toString().match(/m/g) || []).length);
+                    let cnt = mcnt + dcnt;
+                    let per = 100.0 / prog * cnt;
+                    document.getElementById('prog').querySelector('.progress').style.width = per.toString() + '%';
+                    rcnt = Math.min(mcnt, dcnt) + 1;
+                    rcnt = Math.min(rcnt, rprog);
+                    document.getElementById('info').innerText = '다운로드 중...';
+                    document.getElementById('infoProgress').innerText = rcnt.toString() + ' / ' + rprog.toString() + '화(' + per.toFixed(2).toString() + '%)...';
+                });
+                downloaderProcess.on('close', (code) => {
+                    if (code == 0) {
+                        showToast('웹툰이 성공적으로 다운로드 되었습니다!', '폴더 열기', 'showFolder();', 60000);
+                        loadHTML('index.html');
+                    } else showToast('웹툰을 다운로드 하는 중 오류가 발생했어요!');
+                });
             }, 100);
         }, 500);
     }
 
     function openSaveOpSection() {
+        if (!document.getElementById('saveDir').value) {
+            showToast('저장할 경로를 입력하세요!');
+            return;
+        }
         document.getElementById('basicDetail').style.marginLeft = '-30px';
         document.getElementById('basicDetail').style.opacity = '0';
         setTimeout(() => {
@@ -121,19 +197,28 @@
                         document.getElementById('cover').style.background = '#ffffff';
                         let range = document.getElementById('range');
                         let speed = document.getElementById('speed');
+                        try {
 
-                        noUiSlider.create(range, {
-                            start: [1, maxEpisode],
-                            connect: true,
-                            step: 1,
-                            range: {
-                                'min': 1,
-                                'max': maxEpisode
-                            },
-                            tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
-                        });
+                            rangeSlider = noUiSlider.create(range, {
+                                start: [1, maxEpisode],
+                                connect: true,
+                                step: 1,
+                                range: {
+                                    'min': 1,
+                                    'max': maxEpisode
+                                },
+                                tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
+                            });
+                        } catch (e) {
+                            range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
+                            rangeSlider = {
+                                get: () => {
+                                    return [1, 1]
+                                }
+                            };
+                        }
 
-                        noUiSlider.create(speed, {
+                        speedSlider = noUiSlider.create(speed, {
                             start: [4],
                             step: 1,
                             range: {

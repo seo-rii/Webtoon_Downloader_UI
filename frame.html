@@ -9,6 +9,8 @@
     <link href="./css/search.css" rel="stylesheet" type="text/css">
     <link href="./css/detail.css" rel="stylesheet" type="text/css">
     <link href="./css/button.css" rel="stylesheet" type="text/css">
+    <link href="./css/radio.css" rel="stylesheet" type="text/css">
+    <link href="./css/progress.css" rel="stylesheet" type="text/css">
     <link id="theme" rel="stylesheet" type="text/css">
     <link href="./css/nouislider.css" rel="stylesheet">
     <script src="./js/nouislider.js"></script>
@@ -77,6 +79,7 @@
     const path = require('path');
     const {spawn, execSync} = require('child_process');
     const {dialog} = require('electron').remote;
+    const child_process = require('child_process');
     const urlParams = new URLSearchParams(window.location.search);
     const locale = urlParams.get('locale');
 
@@ -139,7 +142,7 @@
 
     let isToastShowing = false, currentStat = 0;
 
-    function toastWorker(msg, nowStat) {
+    function toastWorker(msg, nowStat, time) {
         let delay = 0;
         if (isToastShowing) delay = 300;
         document.getElementById('toast').style.marginTop = '0px';
@@ -151,13 +154,13 @@
                 if (currentStat !== nowStat) return;
                 document.getElementById('toast').style.marginTop = '0px';
                 isToastShowing = false;
-            }, 7000);
+            }, time);
         }, delay);
     }
 
-    function showToast(msg, customMsg = '닫기', customEvent = 'closeToast();') {
+    function showToast(msg, customMsg = '닫기', customEvent = 'closeToast();', time = 7000) {
         ++currentStat;
-        toastWorker(msg + ` <span style="float: right" onclick="${customEvent}">${customMsg}</span>`, currentStat);
+        toastWorker(msg + ` <span style="float: right" onclick="${customEvent}">${customMsg}</span>`, currentStat, time);
     }
 
     function closeToast() {
@@ -185,7 +188,7 @@
         return false;
     }
 
-    let webtoonTitle;
+    let webtoonTitle, rangeSlider, speedSlider, downloaderProcess, savePath;
 </script>
 </body>
 </html>

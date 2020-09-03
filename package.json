@@ -24,7 +24,7 @@
     },
     "win": {
       "extraFiles": [
-        "download.exe"
+        "download"
       ],
       "target": [
         {

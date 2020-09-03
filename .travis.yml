@@ -10,9 +10,6 @@ branches:
   only:
     - master
 
-before-install:
-  - powershell "Invoke-WebRequest https://github.com/04SeoHyun/Webtoon_Downloader/releases/download/3.3.4/Webtoon_Downloader_3_3_4.exe -OutFile downloader.exe"
-
 install:
   - npm install
 
