@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/04SeoHyun/Webtoon_Downloader_UI.git"
+    "url": "git+https://github.com/Seo-Rii/Webtoon_Downloader_UI.git"
   },
-  "author": "Seohyun Lee <04seohyun@gmail.com>",
+  "author": "SeoRii <studioSeoRii@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/04SeoHyun/Webtoon_Downloader_UI/issues"
+    "url": "https://github.com/Seo-Rii/Webtoon_Downloader_UI/issues"
   },
   "build": {
     "productName": "Webtoon Downloader",
@@ -24,7 +24,7 @@
     },
     "win": {
       "extraFiles": [
-        "download"
+        "./downloader/**/*"
       ],
       "target": [
         {
@@ -34,20 +34,20 @@
           ]
         }
       ],
-      "icon": "./res/logo.ico"
+      "icon": "./logo.ico"
     },
     "portable": {
       "artifactName": "Webtoon_Downloader.exe"
     }
   },
-  "homepage": "https://github.com/04SeoHyun/Webtoon_Downloader_UI#readme",
+  "homepage": "https://github.com/Seo-Rii/Webtoon_Downloader_UI#readme",
   "dependencies": {
     "request": "^2.88.2",
     "electron-settings": "^4.0.2",
     "cheerio": "^1.0.0-rc.3"
   },
   "devDependencies": {
-    "electron": "^9.1.0",
-    "electron-builder": "^22.7.0"
+    "electron": "^10.1.1",
+    "electron-builder": "^22.8.0"
   }
 }

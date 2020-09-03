@@ -23,7 +23,8 @@ function createWindow() {
     win = new BrowserWindow({
         width: 900, height: 600, webPreferences: {
             nodeIntegration: true,
-            webSecurity: false
+            webSecurity: false,
+            enableRemoteModule: true
         }, icon: path.join(__dirname, 'logo.ico'), frame: false
     });
     win.setMenu(null);
