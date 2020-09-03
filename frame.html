@@ -160,7 +160,7 @@
 
     function showToast(msg, customMsg = '닫기', customEvent = 'closeToast();', time = 7000) {
         ++currentStat;
-        toastWorker(msg + ` <span style="float: right" onclick="${customEvent}">${customMsg}</span>`, currentStat, time);
+        toastWorker(msg + ` <span style="float: right;cursor:pointer;" onclick="${customEvent}">${customMsg}</span>`, currentStat, time);
     }
 
     function closeToast() {

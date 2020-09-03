@@ -4,15 +4,16 @@
 <div class="section">
     <div style="width:calc(80vw - 4px);margin-left: 50vw;transform: translateX(-50%);">
         <div style="width:100%;height:174px;">
-            <div style="float: left; width: 250px;height:174px;">
-                <div id="cover" style="height: 100px;">
+            <div style="float: left; width: 260px;height:170px;">
+                <div id="cover" style="height: 170px;">
                     <div id="thumbnail" style="margin:0;padding-bottom:0;bottom:0;height: 100%;"></div>
                 </div>
             </div>
-            <div style="float: left;min-width:100px;width:calc(100% - 250px);padding-left: 30px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
+            <div style="float: left;min-width:100px;width:calc(100% - 280px);padding-left: 40px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
                 <div>
                     <h3 id="webToonTitle" style="font-size: 30px;"></h3>
-                    <p id="webToonText" style="font-size: 20px;"></p>
+                    <p id="webToonText"
+                       style="font-size: 20px;overflow: hidden;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"></p>
                 </div>
             </div>
         </div>
@@ -103,11 +104,11 @@
 
                 if (mergeFlag) downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'kakao', webtoonId,
                         document.getElementById('saveDir').value]);
                 else downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'kakao', webtoonId,
                         document.getElementById('saveDir').value]);
 
                 downloaderProcess.stdout.on('data', (data) => {
@@ -170,123 +171,72 @@
         return b;
     }
 
-    function naverDetail() {
+    function kakaoDetail() {
         showToast("정보를 불러오는 중...", '');
-        fetch("https://comic.naver.com/webtoon/list.nhn?titleId=" + webtoonId).then(response => {
+        fetch("https://page.kakao.com/home?seriesId=" + webtoonId).then(response => {
             response.text().then(result => {
-                const cheerio = require('cheerio');
-                const H = cheerio.load(result);
-                webtoonTitle = H('meta[property="og:title"]').attr("content")
-                let helper = H('div .detail > p').html()
-                //document.getElementById('thumbnail').src = imgurl;
+                const parser = new DOMParser();
+                const reqdocument = parser.parseFromString(result, 'text/html');
+                let obj = JSON.parse(reqdocument.getElementById('__NEXT_DATA__').innerHTML);
+
+                webtoonTitle = obj.props.initialState.series.series.title;
+                let helper = obj.props.initialState.series.series.description;
                 document.getElementById('webToonTitle').innerHTML = webtoonTitle;
                 document.getElementById('webToonText').innerHTML = helper;
-                fetch("https://comic.naver.com/webtoon/detail.nhn?titleId=" + webtoonId + "&no=0").then(response => {
-                    response.text().then(result2 => {
-                        const H2 = cheerio.load(result2)
-                        ur = H2('meta[property="og:url"]').attr("content")
-                        if (ur == "https://comic.naver.com/main.nhn") {
-                            showToast("웹툰 ID가 올바르지 않아요!");
-                            return;
-                        }
-                        if (ur == null) {
-                            showToast("계속하려면 네이버 아이디로 로그인해야합니다.");
-                            return;
-                        }
-                        let maxEpisode = parseInt(getQueryStringObject(ur)['no']);
-                        let range = document.getElementById('range');
-                        let speed = document.getElementById('speed');
-                        try {
+                let maxEpisode = obj.props.initialState.series.series.onSaleCount;
 
-                            rangeSlider = noUiSlider.create(range, {
-                                start: [1, maxEpisode],
-                                connect: true,
-                                step: 1,
-                                range: {
-                                    'min': 1,
-                                    'max': maxEpisode
-                                },
-                                tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
-                            });
-                        } catch (e) {
-                            range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
-                            rangeSlider = {
-                                get: () => {
-                                    return [1, 1]
-                                }
-                            };
-                        }
+                let thumb = document.createElement('img');
+                thumb.classList.add('thumbnailImgD');
+                thumb.src = 'https://dn-img-page.kakao.com/download/resource?kid=' + obj.props.initialState.series.series.landThumbnailUrl;
+                document.getElementById('thumbnail').append(thumb);
 
-                        speedSlider = noUiSlider.create(speed, {
-                            start: [4],
-                            step: 1,
-                            range: {
-                                'min': 1,
-                                'max': 5
-                            },
-                            tooltips: {
-                                from: Number,
-                                to: (num) => {
-                                    if (num == 1) return "매우 느리게";
-                                    if (num == 2) return "느리게";
-                                    if (num == 3) return "보통";
-                                    if (num == 4) return "빠르게";
-                                    if (num == 5) return "매우 빠르게";
-                                }
-                            }
-                        });
-                        closeToast();
+                let range = document.getElementById('range');
+                let speed = document.getElementById('speed');
+                try {
+                    rangeSlider = noUiSlider.create(range, {
+                        start: [1, maxEpisode],
+                        connect: true,
+                        step: 1,
+                        range: {
+                            'min': 1,
+                            'max': maxEpisode
+                        },
+                        tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
                     });
+                } catch (e) {
+                    range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
+                    rangeSlider = {
+                        get: () => {
+                            return [1, 1]
+                        }
+                    };
+                }
+
+                speedSlider = noUiSlider.create(speed, {
+                    start: [4],
+                    step: 1,
+                    range: {
+                        'min': 1,
+                        'max': 5
+                    },
+                    tooltips: {
+                        from: Number,
+                        to: (num) => {
+                            if (num == 1) return "매우 느리게";
+                            if (num == 2) return "느리게";
+                            if (num == 3) return "보통";
+                            if (num == 4) return "빠르게";
+                            if (num == 5) return "매우 빠르게";
+                        }
+                    }
                 });
+                closeToast();
             });
         });
-        fetch('https://m.comic.naver.com/webtoon/list.nhn?titleId=' + webtoonId)
-            .then(response => {
-                response.text().then(res => {
-                    newEls = [];
-                    const parser = new DOMParser();
-                    try {
-                        maxPage = parseInt(parser.parseFromString(res, 'text/html').querySelector('.total').innerText.replace(/[^\d.]/g, ''));
-                    } catch (e) {
-                        maxPage = 1;
-                    }
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.area_thumbnail').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
-
-                    }
-                    newEls.reverse();
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.thumb_bg').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailBGImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
-
-                    }
-                    newEls.reverse();
-                    newEls.forEach(el => {
-                        document.getElementById('thumbnail').appendChild(el);
-                    })
-                });
-            });
     }
 
-    function nSetDetail_init() {
-        naverDetail();
+    function kSetDetail_init() {
+        kakaoDetail();
     }
 </script>
 </body>

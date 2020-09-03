@@ -1,0 +1,195 @@
+<html lang="ko">
+<body>
+<div class="section">
+    <div style="height: 100px;"></div>
+    <h2 style="margin:10px;padding-top: 70px;">어떤 작품을 다운로드할까요?</h2>
+    <form class="form__group" id="comicName" onkeydown="return event.key != 'Enter';" style="padding:10px;">
+        <input class="form__field" id="comicSearch" name="fname" placeholder="검색" type="text">
+        <label class="form__label" for="comicSearch">검색</label>
+    </form>
+    <div id="searchListCont">
+        <div id="searchList" style="height:126px;padding-left: 90px;"></div>
+    </div>
+    <div class="scroll_down hide" id="SscrollDown" onclick="SscrollDown();">
+        >
+    </div>
+    <div class="scroll_up hide" id="SscrollUp" onclick="SscrollUp();">
+        <
+    </div>
+    <h2 style="margin: -150px 10px 10px;">이런 작품은 어때요?</h2>
+    <div id="recommendListCont" style="width:calc(100vw - 4px);overflow-x:scroll;padding: 10px 10px 70px;">
+        <div id="recommendList" style="height:126px;padding-left: 90px;"></div>
+    </div>
+    <div class="scroll_down" onclick="RscrollDown();">
+        >
+    </div>
+    <div class="scroll_up" onclick="RscrollUp();">
+        <
+    </div>
+</div>
+
+<script>
+    function SscrollDown() {
+        let cnt = 0;
+        let intv = setInterval(() => {
+            ++cnt;
+            if (cnt > 40) clearInterval(intv);
+            document.getElementById('searchListCont').scrollLeft += 10;
+        }, 1);
+    }
+
+    function SscrollUp() {
+        let cnt = 0;
+        let intv = setInterval(() => {
+            ++cnt;
+            if (cnt > 40) clearInterval(intv);
+            document.getElementById('searchListCont').scrollLeft -= 10;
+        }, 1);
+    }
+
+    function RscrollDown() {
+        let cnt = 0;
+        let intv = setInterval(() => {
+            ++cnt;
+            if (cnt > 40) clearInterval(intv);
+            document.getElementById('recommendListCont').scrollLeft += 10;
+        }, 1);
+    }
+
+    function RscrollUp() {
+        let cnt = 0;
+        let intv = setInterval(() => {
+            ++cnt;
+            if (cnt > 40) clearInterval(intv);
+            document.getElementById('recommendListCont').scrollLeft -= 10;
+        }, 1);
+    }
+
+    function isFinished(str) {
+        str = str.replace(/[^\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]/gi, "");
+        for (let i = 0; i < str; i++) {
+            if (str.charAt(i) < "가" || str.charAt(i) > "힣") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function kSelComic_init() {
+        getRecommend();
+        setTimeout(() => {
+            document.getElementById('comicSearch').focus();
+        }, 500);
+        document.getElementById('comicSearch').addEventListener('keyup', () => {
+            search(document.getElementById('comicSearch').value);
+        })
+    }
+
+    function getRecommend() {
+        let elS = [];
+        fetch('https://page.kakao.com/main?categoryUid=10&subCategoryUid=1000').then(response => {
+            response.text().then(res => {
+                const parser = new DOMParser();
+                const reqdocument = parser.parseFromString(res, 'text/html');
+                reqdocument.querySelector('.listItemBox').querySelectorAll('.listItem').forEach(el => {
+                    try {
+                        let template = document.createElement('template');
+                        template.innerHTML = `<a class="card cardAppear" href="kakao/kSetDetail.html" data-id="${el.querySelector('a').href.split('seriesId=')[1]}">
+    <div>
+        <img src="${'https:' + el.querySelector('img').getAttribute('data-src')}">
+        <div class="cardInfo">
+            <h2>${el.querySelectorAll('.text-ellipsis')[0].innerText}</h2>
+            <p>${el.querySelectorAll('.text-ellipsis')[2].innerText} 읽음</p>
+            <p>${el.querySelectorAll('.text-ellipsis')[3].innerText}</p>
+        </div>
+    </div>
+</a>`;
+                        elS.push(template.content.firstChild);
+                    } catch (e) {
+                        showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('kakao/selComic.html');");
+                    }
+                });
+                let cnt = 0;
+                document.getElementById('recommendList').style.width = 'calc(406px * ' + elS.length + ' + 120px)';
+                elS.forEach(el => {
+                    cnt++;
+                    setTimeout(() => {
+                        try {
+                            document.getElementById('recommendList').appendChild(el);
+                            el.addEventListener("click", e => {
+                                e.preventDefault();
+                                loadHTML(el.getAttribute('href'));
+                                webtoonId = el.getAttribute('data-id');
+                            });
+                        } catch (e) {
+
+                        }
+                    }, cnt * 150);
+                });
+            });
+        }).catch(() => {
+            showToast('네트워크에 연결할 수 없습니다.', '재시도', "loadHTML('kakao/selComic.html');");
+        });
+    }
+
+    function search(query) {
+        if (!isFinished(query)) return;
+        if (query === '') {
+            document.getElementById('searchListCont').classList.remove('open');
+            document.getElementById('SscrollDown').classList.add('hide');
+            document.getElementById('SscrollUp').classList.add('hide');
+            return;
+        }
+        let elS = [];
+        fetch('https://page.kakao.com/search?word=' + query).then(response => {
+            response.text().then(res => {
+                const parser = new DOMParser();
+                const reqdocument = parser.parseFromString(res, 'text/html');
+                let obj = JSON.parse(reqdocument.getElementById('__NEXT_DATA__').innerHTML);
+                if (!obj.props.initialState.search.categories['10'].seriesList) return;
+                obj.props.initialState.search.categories['10'].seriesList.forEach(el => {
+                    try {
+                        let template = document.createElement('template');
+                        template.innerHTML = `<a class="card" href="kakao/kSetDetail.html" data-id="${el.seriesId}">
+    <div>
+        <img src="${'https://dn-img-page.kakao.com/download/resource?kid=' + el.image}">
+        <div class="cardInfo">
+            <h2>${el.title}</h2>
+            <p>${el.author}</p>
+            <p>${el.readCount}명 읽음</p>
+        </div>
+    </div>
+</a>`;
+                        elS.push(template.content.firstChild);
+                    } catch (e) {
+
+                    }
+                });
+                if (elS.length === 0) {
+                    return;
+                } else if (query) {
+                    document.getElementById('searchList').innerHTML = "";
+                    document.getElementById('searchListCont').classList.add('open');
+                    document.getElementById('SscrollDown').classList.remove('hide');
+                    document.getElementById('SscrollUp').classList.remove('hide');
+                } else {
+                    document.getElementById('searchList').innerHTML = "";
+                    document.getElementById('searchListCont').classList.remove('open');
+                    document.getElementById('SscrollDown').classList.add('hide');
+                    document.getElementById('SscrollUp').classList.add('hide');
+                }
+                document.getElementById('searchList').style.width = 'calc(406px * ' + elS.length.toString() + ' + 120px)';
+                elS.forEach(el => {
+                    document.getElementById('searchList').appendChild(el);
+                    el.addEventListener("click", e => {
+                        e.preventDefault();
+                        loadHTML(el.getAttribute('href'));
+                        webtoonId = el.getAttribute('data-id');
+                    });
+                });
+            });
+        });
+    }
+</script>
+</body>
+</html>
