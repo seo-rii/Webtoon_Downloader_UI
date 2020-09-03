@@ -7,7 +7,12 @@
     <link href="./css/card.css" rel="stylesheet" type="text/css">
     <link href="./css/input.css" rel="stylesheet" type="text/css">
     <link href="./css/search.css" rel="stylesheet" type="text/css">
+    <link href="./css/detail.css" rel="stylesheet" type="text/css">
+    <link href="./css/button.css" rel="stylesheet" type="text/css">
     <link id="theme" rel="stylesheet" type="text/css">
+    <link href="./css/nouislider.css" rel="stylesheet">
+    <script src="./js/nouislider.js"></script>
+    <script src="./js/wNumb.js"></script>
 </head>
 
 <body>
@@ -46,7 +51,7 @@
 </div>
 <div id="scripts"></div>
 
-<div id="toast">테스트</div>
+<div id="toast"></div>
 
 <script>
     require('./js/frameLess.js');
@@ -71,6 +76,7 @@
     const fs = require('fs');
     const path = require('path');
     const {spawn, execSync} = require('child_process');
+    const {dialog} = require('electron').remote;
     const urlParams = new URLSearchParams(window.location.search);
     const locale = urlParams.get('locale');
 
@@ -178,6 +184,8 @@
         showToast('오류가 발생했습니다 :(', '프로그램 재시작', 'restart');
         return false;
     }
+
+    let webtoonTitle;
 </script>
 </body>
 </html>

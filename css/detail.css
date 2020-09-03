@@ -1,0 +1,86 @@
+#thumbnail img:nth-child(1) {
+    animation-delay: .5s;
+}
+
+#thumbnail img:nth-child(2) {
+    animation-delay: .8s;
+}
+
+#thumbnail img:nth-child(3) {
+    animation-delay: 1.3s;
+}
+
+#thumbnail img:nth-child(4) {
+    animation-delay: 1.6s;
+}
+
+#thumbnail img:nth-child(5) {
+    animation-delay: 2.1s;
+}
+
+.prev {
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+.thumbnailImg {
+    position: absolute;
+    height: 174px;
+    width: 218px;
+    left: 100px;
+    opacity: 0;
+    animation-name: slideIn;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    display: inline;
+    vertical-align: top;
+    float: none;
+    clear: both;
+}
+
+.thumbnailBGImg {
+    counter-increment: section;
+    position: absolute;
+    height: 174px;
+    width: 250px;
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    display: inline;
+    vertical-align: top;
+    float: none;
+    clear: both;
+    -webkit-mask-image: radial-gradient(50% 30%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)) !important;
+}
+
+@-webkit-keyframes slideIn {
+    0% {
+        opacity: 0;
+        left: 100px;
+    }
+    100% {
+        opacity: 1;
+        left: 32px;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeSlideIn {
+    0% {
+        margin-top: 20px;
+        opacity: 0;
+    }
+    100% {
+        margin-top: 0;
+        opacity: 1;
+    }
+}

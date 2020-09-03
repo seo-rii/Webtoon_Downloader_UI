@@ -1,0 +1,15 @@
+.btn:hover {
+    background: #AAAAAA;
+}
+
+.btn {
+    padding: 10px;
+    margin: 10px;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.btn:active {
+    background: #00D465;
+}

@@ -156,12 +156,15 @@
 
                     }
                 });
-                document.getElementById('searchList').innerHTML = "";
-                if (elS.length > 0) {
+                if (elS.length === 0) {
+                    return;
+                } else if (query) {
+                    document.getElementById('searchList').innerHTML = "";
                     document.getElementById('searchListCont').classList.add('open');
                     document.getElementById('SscrollDown').classList.remove('hide');
                     document.getElementById('SscrollUp').classList.remove('hide');
                 } else {
+                    document.getElementById('searchList').innerHTML = "";
                     document.getElementById('searchListCont').classList.remove('open');
                     document.getElementById('SscrollDown').classList.add('hide');
                     document.getElementById('SscrollUp').classList.add('hide');

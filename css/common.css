@@ -56,3 +56,7 @@
     background: #827397;
     cursor: pointer;
 }
+
+#main {
+    overflow-x: hidden;
+}

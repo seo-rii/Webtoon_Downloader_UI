@@ -29,7 +29,7 @@ function createWindow() {
     win.setMenu(null);
     win.loadURL(getFramePath());
 
-    //win.webContents.openDevTools();
+    win.webContents.openDevTools({mode: "detach"});
 
     win.on('closed', () => {
         win = null;
