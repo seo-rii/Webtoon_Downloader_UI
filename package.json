@@ -48,7 +48,7 @@
     "cheerio": "^1.0.0-rc.3"
   },
   "devDependencies": {
-    "electron": "^10.1.1",
+    "electron": "^10.1.2",
     "electron-builder": "^22.8.0"
   }
 }
