@@ -38,7 +38,8 @@
     },
     "portable": {
       "artifactName": "Webtoon_Downloader.exe",
-      "useZip": true
+      "useZip": true,
+      "splashImage": "./splash.bmp"
     }
   },
   "homepage": "https://github.com/Seo-Rii/Webtoon_Downloader_UI#readme",
