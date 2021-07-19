@@ -1,6 +1,6 @@
 {
   "name": "webtoon-downloader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Webtoon Downloader",
   "main": "index.js",
   "scripts": {
@@ -45,10 +45,10 @@
   "dependencies": {
     "request": "^2.88.2",
     "electron-settings": "^4.0.2",
-    "cheerio": "^1.0.0-rc.3"
+    "cheerio": "^1.0.0-rc.10"
   },
   "devDependencies": {
-    "electron": "^10.2.0",
-    "electron-builder": "^22.8.0"
+    "electron": "^13.1.7",
+    "electron-builder": "^22.11.7"
   }
 }

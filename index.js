@@ -24,13 +24,14 @@ function createWindow() {
         width: 900, height: 600, webPreferences: {
             nodeIntegration: true,
             webSecurity: false,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            contextIsolation: false
         }, icon: path.join(__dirname, 'logo.ico'), frame: false
     });
     win.setMenu(null);
     win.loadURL(getFramePath());
 
-    //win.webContents.openDevTools({mode: "detach"});
+    win.webContents.openDevTools({mode: "detach"});
 
     win.on('closed', () => {
         win = null;

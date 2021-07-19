@@ -1,293 +1,298 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <body>
-<div class="section">
-    <div style="width:calc(80vw - 4px);margin-left: 50vw;transform: translateX(-50%);">
-        <div style="width:100%;height:174px;">
-            <div style="float: left; width: 250px;height:174px;">
-                <div id="cover" style="height: 100px;">
-                    <div id="thumbnail" style="margin:0;padding-bottom:0;bottom:0;height: 100%;"></div>
+    <div class="section">
+        <div style="width:calc(80vw - 4px);margin-left: 50vw;transform: translateX(-50%);">
+            <div style="width:100%;height:174px;">
+                <div style="float: left; width: 250px;height:174px;">
+                    <div id="cover" style="height: 100px;">
+                        <div id="thumbnail" style="margin:0;padding-bottom:0;bottom:0;height: 100%;"></div>
+                    </div>
+                </div>
+                <div
+                    style="float: left;min-width:100px;width:calc(100% - 250px);padding-left: 30px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
+                    <div>
+                        <h3 id="webToonTitle" style="font-size: 30px;"></h3>
+                        <p id="webToonText" style="font-size: 20px;"></p>
+                    </div>
                 </div>
             </div>
-            <div style="float: left;min-width:100px;width:calc(100% - 250px);padding-left: 30px;min-height: 174px;display: flex;align-items: center;justify-content: center;">
+            <div id="basicDetail" style="width:100%;transition: all ease-in-out .5s;">
+                <br>
+                <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운받을 회차</h2>
+                <div id="range" style="margin: 15px;"></div>
+                <h2 style="font-size: 30px;margin: 20px 10px 10px;">저장할 경로</h2>
+                <form class="form__group" id="comicName" onkeydown="return event.key != 'Enter';" style="padding:10px;">
+                    <input class="form__field" id="saveDir" name="fname" onclick="selectFolder();" placeholder="경로"
+                        readonly type="text">
+                    <label class="form__label" for="saveDir">경로</label>
+                </form>
                 <div>
-                    <h3 id="webToonTitle" style="font-size: 30px;"></h3>
-                    <p id="webToonText" style="font-size: 20px;"></p>
+                    <div class="btn" onclick="openSaveOpSection();" style="width:80px;float: right;">다음</div>
                 </div>
             </div>
-        </div>
-        <div id="basicDetail" style="width:100%;transition: all ease-in-out .5s;">
-            <br>
-            <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운받을 회차</h2>
-            <div id="range" style="margin: 15px;"></div>
-            <h2 style="font-size: 30px;margin: 20px 10px 10px;">저장할 경로</h2>
-            <form class="form__group" id="comicName" onkeydown="return event.key != 'Enter';" style="padding:10px;">
-                <input class="form__field" id="saveDir" name="fname"
-                       onclick="selectFolder();" placeholder="경로" readonly type="text">
-                <label class="form__label" for="saveDir">경로</label>
-            </form>
-            <div>
-                <div class="btn" onclick="openSaveOpSection();" style="width:80px;float: right;">다음</div>
+            <div id="secondDetail"
+                style="width:100%;margin-left:30px;opacity:0;display:none;transition: all ease-in-out .5s;">
+                <br>
+                <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운로드 속도</h2>
+                <div id="speed" style="margin: 15px;"></div>
+                <h2 style="font-size: 30px;margin: 20px 10px 15px;">다운로드 옵션</h2>
+                <div class="radio-group">
+                    <label for="opPdf">
+                        <input checked="checked" id="opPdf" name="g1" type="radio"><span>PDF로 병합</span>
+                    </label>
+                    <label for="opMerge">
+                        <input id="opMerge" name="g1" type="radio"><span>이미지로 병합</span>
+                    </label>
+                    <label for="opBasic">
+                        <input id="opBasic" name="g1" type="radio"><span>병합하지 않기</span>
+                    </label>
+                </div>
+                <div>
+                    <div class="btn" onclick="download();" style="width:80px;float: right;">다운로드</div>
+                </div>
             </div>
-        </div>
-        <div id="secondDetail"
-             style="width:100%;margin-left:30px;opacity:0;display:none;transition: all ease-in-out .5s;">
-            <br>
-            <h2 style="font-size: 30px;margin: 10px 10px 45px;">다운로드 속도</h2>
-            <div id="speed" style="margin: 15px;"></div>
-            <h2 style="font-size: 30px;margin: 20px 10px 15px;">다운로드 옵션</h2>
-            <div class="radio-group">
-                <label for="opPdf">
-                    <input checked="checked" id="opPdf" name="g1" type="radio"><span>PDF로 병합</span>
-                </label>
-                <label for="opMerge">
-                    <input id="opMerge" name="g1" type="radio"><span>이미지로 병합</span>
-                </label>
-                <label for="opBasic">
-                    <input id="opBasic" name="g1" type="radio"><span>병합하지 않기</span>
-                </label>
-            </div>
-            <div>
-                <div class="btn" onclick="download();" style="width:80px;float: right;">다운로드</div>
-            </div>
-        </div>
-        <div id="downloadDetail"
-             style="width:100%;margin-left:30px;opacity:0;display:none;transition: all ease-in-out .5s;">
-            <br>
-            <div style="height: 90px;width: 100%;">
-                <h2 id="info" style="font-size: 30px;margin: 10px 10px 45px;float: left;">초기화 중...</h2>
-                <h3 id="infoProgress"
-                    style="font-size: 20px;float: left ;margin-top: 22px;margin-left: 5px;color: #555555;"></h3>
-            </div>
-            <div class="progress-container" id="prog">
-                <div class="progressBack"></div>
-                <div class="progress"></div>
-                <div class="progress-materializecss">
-                    <div class="indeterminate"></div>
+            <div id="downloadDetail"
+                style="width:100%;margin-left:30px;opacity:0;display:none;transition: all ease-in-out .5s;">
+                <br>
+                <div style="height: 90px;width: 100%;">
+                    <h2 id="info" style="font-size: 30px;margin: 10px 10px 45px;float: left;">초기화 중...</h2>
+                    <h3 id="infoProgress"
+                        style="font-size: 20px;float: left ;margin-top: 22px;margin-left: 5px;color: #555555;"></h3>
+                </div>
+                <div class="progress-container" id="prog">
+                    <div class="progressBack"></div>
+                    <div class="progress"></div>
+                    <div class="progress-materializecss">
+                        <div class="indeterminate"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    function showFolder() {
-        child_process.exec('start "" "' + savePath + '"');
-    }
-
-    function download() {
-        savePath = document.getElementById('saveDir').value;
-        document.getElementById('secondDetail').style.marginLeft = '-30px';
-        document.getElementById('secondDetail').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('secondDetail').style.display = 'none';
-            document.getElementById('downloadDetail').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('downloadDetail').style.marginLeft = '0';
-                document.getElementById('downloadDetail').style.opacity = '1';
-
-                let dTr, mTr;
-                if (speedSlider.get() == 1) dTr = 1, mTr = 1;
-                if (speedSlider.get() == 2) dTr = 2, mTr = 2;
-                if (speedSlider.get() == 3) dTr = 4, mTr = 4;
-                if (speedSlider.get() == 4) dTr = 8, mTr = 4;
-                if (speedSlider.get() == 5) dTr = 8, mTr = 8;
-
-
-                let mcnt = 0, dcnt = 0, rcnt = 0;
-                let rprog = Math.round(rangeSlider.get()[1]) - Math.round(rangeSlider.get()[0]) + 1, prog = rprog * 2;
-
-                let mergeFlag = '';
-                if (document.getElementById('opPdf').checked) mergeFlag = '--mergeAsPdf';
-                else if (document.getElementById('opMerge').checked) mergeFlag = '--mergeAsPng';
-                else prog = rprog;
-
-                if (mergeFlag) downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
-                    ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
-                        document.getElementById('saveDir').value]);
-                else downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
-                    ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
-                        '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
-                        document.getElementById('saveDir').value]);
-
-                downloaderProcess.stdout.on('data', (data) => {
-                    console.log(data.toString());
-                    document.getElementById('prog').querySelector('.progress-materializecss').style.opacity = '0';
-                    dcnt = dcnt + ((data.toString().match(/d/g) || []).length);
-                    mcnt = mcnt + ((data.toString().match(/m/g) || []).length);
-                    let cnt = mcnt + dcnt;
-                    let per = 100.0 / prog * cnt;
-                    document.getElementById('prog').querySelector('.progress').style.width = per.toString() + '%';
-                    rcnt = Math.min(mcnt, dcnt) + 1;
-                    rcnt = Math.min(rcnt, rprog);
-                    document.getElementById('info').innerText = '다운로드 중...';
-                    document.getElementById('infoProgress').innerText = rcnt.toString() + ' / ' + rprog.toString() + '화(' + per.toFixed(2).toString() + '%)...';
-                });
-                downloaderProcess.on('close', (code) => {
-                    if (code == 0) {
-                        showToast('웹툰이 성공적으로 다운로드 되었습니다!', '폴더 열기', 'showFolder();', 60000);
-                        loadHTML('index.html');
-                    } else showToast('웹툰을 다운로드 하는 중 오류가 발생했어요!');
-                });
-            }, 100);
-        }, 500);
-    }
-
-    function openSaveOpSection() {
-        if (!document.getElementById('saveDir').value) {
-            showToast('저장할 경로를 입력하세요!');
-            return;
+    <script>
+        const { dialog } = require('electron').remote
+        const child_process = require('child_process')
+        function showFolder() {
+            child_process.exec('start "" "' + savePath + '"');
         }
-        document.getElementById('basicDetail').style.marginLeft = '-30px';
-        document.getElementById('basicDetail').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('basicDetail').style.display = 'none';
-            document.getElementById('secondDetail').style.display = 'block';
+
+        function download() {
+            savePath = document.getElementById('saveDir').value;
+            document.getElementById('secondDetail').style.marginLeft = '-30px';
+            document.getElementById('secondDetail').style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('secondDetail').style.marginLeft = '0';
-                document.getElementById('secondDetail').style.opacity = '1';
-            }, 100);
-        }, 500);
-    }
+                document.getElementById('secondDetail').style.display = 'none';
+                document.getElementById('downloadDetail').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('downloadDetail').style.marginLeft = '0';
+                    document.getElementById('downloadDetail').style.opacity = '1';
 
-    function selectFolder() {
-        dialog.showOpenDialog({
-            properties: ['openDirectory']
-        }).then(result => {
-            document.getElementById('saveDir').value = path.join(result.filePaths[0], webtoonTitle);
-        });
-    }
+                    let dTr, mTr;
+                    if (speedSlider.get() == 1) dTr = 1, mTr = 1;
+                    if (speedSlider.get() == 2) dTr = 2, mTr = 2;
+                    if (speedSlider.get() == 3) dTr = 4, mTr = 4;
+                    if (speedSlider.get() == 4) dTr = 8, mTr = 4;
+                    if (speedSlider.get() == 5) dTr = 8, mTr = 8;
 
-    function getQueryStringObject(ur) {
-        var a = ur.split('?')[1].split('&');
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i) {
-            var p = a[i].split('=', 2);
-            if (p.length == 1) b[p[0]] = "";
-            else b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+
+                    let mcnt = 0, dcnt = 0, rcnt = 0;
+                    let rprog = Math.round(rangeSlider.get()[1]) - Math.round(rangeSlider.get()[0]) + 1, prog = rprog * 2;
+
+                    let mergeFlag = '';
+                    if (document.getElementById('opPdf').checked) mergeFlag = '--mergeAsPdf';
+                    else if (document.getElementById('opMerge').checked) mergeFlag = '--mergeAsPng';
+                    else prog = rprog;
+
+                    if (mergeFlag) downloaderProcess = child_process.spawn('downloader.exe',
+                        ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
+                            '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                            document.getElementById('saveDir').value]);
+                    else downloaderProcess = child_process.spawn('downloader.exe',
+                        ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
+                            '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'naver', webtoonId,
+                            document.getElementById('saveDir').value]);
+
+                    downloaderProcess.stdout.on('data', (data) => {
+                        console.log(data.toString());
+                        document.getElementById('prog').querySelector('.progress-materializecss').style.opacity = '0';
+                        dcnt = dcnt + ((data.toString().match(/d/g) || []).length);
+                        mcnt = mcnt + ((data.toString().match(/m/g) || []).length);
+                        let cnt = mcnt + dcnt;
+                        let per = 100.0 / prog * cnt;
+                        document.getElementById('prog').querySelector('.progress').style.width = per.toString() + '%';
+                        rcnt = Math.min(mcnt, dcnt) + 1;
+                        rcnt = Math.min(rcnt, rprog);
+                        document.getElementById('info').innerText = '다운로드 중...';
+                        document.getElementById('infoProgress').innerText = rcnt.toString() + ' / ' + rprog.toString() + '화(' + per.toFixed(2).toString() + '%)...';
+                    });
+                    downloaderProcess.on('close', (code) => {
+                        if (code == 0) {
+                            showToast('웹툰이 성공적으로 다운로드 되었습니다!', '폴더 열기', 'showFolder();', 60000);
+                            loadHTML('index.html');
+                        } else showToast('웹툰을 다운로드 하는 중 오류가 발생했어요!');
+                    });
+                }, 100);
+            }, 500);
         }
-        return b;
-    }
 
-    function naverDetail() {
-        showToast("정보를 불러오는 중...", '');
-        fetch("https://comic.naver.com/webtoon/list.nhn?titleId=" + webtoonId).then(response => {
-            response.text().then(result => {
-                const cheerio = require('cheerio');
-                const H = cheerio.load(result);
-                webtoonTitle = H('meta[property="og:title"]').attr("content")
-                let helper = H('div .detail > p').html()
-                //document.getElementById('thumbnail').src = imgurl;
-                document.getElementById('webToonTitle').innerHTML = webtoonTitle;
-                document.getElementById('webToonText').innerHTML = helper;
-                fetch("https://comic.naver.com/webtoon/detail.nhn?titleId=" + webtoonId + "&no=0").then(response => {
-                    response.text().then(result2 => {
-                        const H2 = cheerio.load(result2)
-                        ur = H2('meta[property="og:url"]').attr("content")
-                        if (ur == "https://comic.naver.com/main.nhn") {
-                            showToast("웹툰 ID가 올바르지 않아요!");
-                            return;
-                        }
-                        if (ur == null) {
-                            showToast("계속하려면 네이버 아이디로 로그인해야합니다.");
-                            return;
-                        }
-                        let maxEpisode = parseInt(getQueryStringObject(ur)['no']);
-                        let range = document.getElementById('range');
-                        let speed = document.getElementById('speed');
-                        try {
+        function openSaveOpSection() {
+            if (!document.getElementById('saveDir').value) {
+                showToast('저장할 경로를 입력하세요!');
+                return;
+            }
+            document.getElementById('basicDetail').style.marginLeft = '-30px';
+            document.getElementById('basicDetail').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('basicDetail').style.display = 'none';
+                document.getElementById('secondDetail').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('secondDetail').style.marginLeft = '0';
+                    document.getElementById('secondDetail').style.opacity = '1';
+                }, 100);
+            }, 500);
+        }
 
-                            rangeSlider = noUiSlider.create(range, {
-                                start: [1, maxEpisode],
-                                connect: true,
+        function selectFolder() {
+            dialog.showOpenDialog({
+                properties: ['openDirectory']
+            }).then(result => {
+                document.getElementById('saveDir').value = path.join(result.filePaths[0], webtoonTitle);
+            });
+        }
+
+        function getQueryStringObject(ur) {
+            var a = ur.split('?')[1].split('&');
+            if (a == "") return {};
+            var b = {};
+            for (var i = 0; i < a.length; ++i) {
+                var p = a[i].split('=', 2);
+                if (p.length == 1) b[p[0]] = "";
+                else b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+            }
+            return b;
+        }
+
+        function naverDetail() {
+            showToast("정보를 불러오는 중...", '');
+            fetch("https://comic.naver.com/webtoon/list.nhn?titleId=" + webtoonId).then(response => {
+                response.text().then(result => {
+                    const cheerio = require('cheerio');
+                    const H = cheerio.load(result);
+                    webtoonTitle = H('meta[property="og:title"]').attr("content")
+                    let helper = H('div .detail > p').html()
+                    //document.getElementById('thumbnail').src = imgurl;
+                    document.getElementById('webToonTitle').innerHTML = webtoonTitle;
+                    document.getElementById('webToonText').innerHTML = helper;
+                    fetch("https://comic.naver.com/webtoon/detail.nhn?titleId=" + webtoonId + "&no=0").then(response => {
+                        response.text().then(result2 => {
+                            const H2 = cheerio.load(result2)
+                            ur = H2('meta[property="og:url"]').attr("content")
+                            if (ur == "https://comic.naver.com/main.nhn") {
+                                showToast("웹툰 ID가 올바르지 않아요!");
+                                return;
+                            }
+                            if (ur == null) {
+                                showToast("계속하려면 네이버 아이디로 로그인해야합니다.");
+                                return;
+                            }
+                            let maxEpisode = parseInt(getQueryStringObject(ur)['no']);
+                            let range = document.getElementById('range');
+                            let speed = document.getElementById('speed');
+                            try {
+
+                                rangeSlider = noUiSlider.create(range, {
+                                    start: [1, maxEpisode],
+                                    connect: true,
+                                    step: 1,
+                                    range: {
+                                        'min': 1,
+                                        'max': maxEpisode
+                                    },
+                                    tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })]
+                                });
+                            } catch (e) {
+                                range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
+                                rangeSlider = {
+                                    get: () => {
+                                        return [1, 1]
+                                    }
+                                };
+                            }
+
+                            speedSlider = noUiSlider.create(speed, {
+                                start: [4],
                                 step: 1,
                                 range: {
                                     'min': 1,
-                                    'max': maxEpisode
+                                    'max': 5
                                 },
-                                tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})]
+                                tooltips: {
+                                    from: Number,
+                                    to: (num) => {
+                                        if (num == 1) return "매우 느리게";
+                                        if (num == 2) return "느리게";
+                                        if (num == 3) return "보통";
+                                        if (num == 4) return "빠르게";
+                                        if (num == 5) return "매우 빠르게";
+                                    }
+                                }
                             });
-                        } catch (e) {
-                            range.innerHTML = "<h2 style='margin-top:-20px;'>한 화밖에 없어요!</h2>";
-                            rangeSlider = {
-                                get: () => {
-                                    return [1, 1]
-                                }
-                            };
-                        }
-
-                        speedSlider = noUiSlider.create(speed, {
-                            start: [4],
-                            step: 1,
-                            range: {
-                                'min': 1,
-                                'max': 5
-                            },
-                            tooltips: {
-                                from: Number,
-                                to: (num) => {
-                                    if (num == 1) return "매우 느리게";
-                                    if (num == 2) return "느리게";
-                                    if (num == 3) return "보통";
-                                    if (num == 4) return "빠르게";
-                                    if (num == 5) return "매우 빠르게";
-                                }
-                            }
+                            closeToast();
                         });
-                        closeToast();
                     });
                 });
             });
-        });
-        fetch('https://m.comic.naver.com/webtoon/list.nhn?titleId=' + webtoonId)
-            .then(response => {
-                response.text().then(res => {
-                    newEls = [];
-                    const parser = new DOMParser();
-                    try {
-                        maxPage = parseInt(parser.parseFromString(res, 'text/html').querySelector('.total').innerText.replace(/[^\d.]/g, ''));
-                    } catch (e) {
-                        maxPage = 1;
-                    }
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.area_thumbnail').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
+            fetch('https://m.comic.naver.com/webtoon/list.nhn?titleId=' + webtoonId)
+                .then(response => {
+                    response.text().then(res => {
+                        newEls = [];
+                        const parser = new DOMParser();
+                        try {
+                            maxPage = parseInt(parser.parseFromString(res, 'text/html').querySelector('.total').innerText.replace(/[^\d.]/g, ''));
+                        } catch (e) {
+                            maxPage = 1;
+                        }
+                        try {
+                            parser.parseFromString(res, 'text/html').querySelector('.area_thumbnail').childNodes.forEach(el => {
+                                if (el.nodeName == "IMG") {
+                                    let newEl = document.createElement('img');
+                                    newEl.innerHTML = el.innerHTML;
+                                    newEl.src = el.src;
+                                    newEl.classList.add('thumbnailImg');
+                                    newEls.push(newEl);
+                                }
+                            });
+                        } catch (e) {
 
-                    }
-                    newEls.reverse();
-                    try {
-                        parser.parseFromString(res, 'text/html').querySelector('.thumb_bg').childNodes.forEach(el => {
-                            if (el.nodeName == "IMG") {
-                                let newEl = document.createElement('img');
-                                newEl.innerHTML = el.innerHTML;
-                                newEl.src = el.src;
-                                newEl.classList.add('thumbnailBGImg');
-                                newEls.push(newEl);
-                            }
-                        });
-                    } catch (e) {
+                        }
+                        newEls.reverse();
+                        try {
+                            parser.parseFromString(res, 'text/html').querySelector('.thumb_bg').childNodes.forEach(el => {
+                                if (el.nodeName == "IMG") {
+                                    let newEl = document.createElement('img');
+                                    newEl.innerHTML = el.innerHTML;
+                                    newEl.src = el.src;
+                                    newEl.classList.add('thumbnailBGImg');
+                                    newEls.push(newEl);
+                                }
+                            });
+                        } catch (e) {
 
-                    }
-                    newEls.reverse();
-                    newEls.forEach(el => {
-                        document.getElementById('thumbnail').appendChild(el);
-                    })
+                        }
+                        newEls.reverse();
+                        newEls.forEach(el => {
+                            document.getElementById('thumbnail').appendChild(el);
+                        })
+                    });
                 });
-            });
-    }
+        }
 
-    function nSetDetail_init() {
-        naverDetail();
-    }
-</script>
+        function nSetDetail_init() {
+            naverDetail();
+        }
+    </script>
 </body>
+
 </html>

@@ -70,6 +70,7 @@
     </div>
 </div>
 <script>
+    const {dialog} = require('electron').remote
     function showFolder() {
         child_process.exec('start "" "' + savePath + '"');
     }
@@ -101,11 +102,11 @@
                 else if (document.getElementById('opMerge').checked) mergeFlag = '--mergeAsPng';
                 else prog = rprog;
 
-                if (mergeFlag) downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
+                if (mergeFlag) downloaderProcess = child_process.spawn('downloader.exe',
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]), mergeFlag,
                         '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'daum', webtoonId,
                         document.getElementById('saveDir').value]);
-                else downloaderProcess = child_process.spawn(path.join('downloader', 'Webtoon_Downloader.exe'),
+                else downloaderProcess = child_process.spawn('downloader.exe',
                     ['-s', Math.round(rangeSlider.get()[0]), '-f', Math.round(rangeSlider.get()[1]),
                         '--noProgressBar', '--downThreadNo', dTr, '--mergeThreadNo', mTr, 'daum', webtoonId,
                         document.getElementById('saveDir').value]);
