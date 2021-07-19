@@ -1,6 +1,8 @@
 # Webtoon_Downloader_UI
 
-<img alt="logo" src="./logo.png" width="250"> 
+[![CD](https://github.com/Seo-Rii/Webtoon_Downloader_UI/actions/workflows/CD.yml/badge.svg)](https://github.com/Seo-Rii/Webtoon_Downloader_UI/actions/workflows/CD.yml)
+
+<img alt="logo" src="./logo.png" width="150"> 
 
 [Seo-Rii/Webtoon_Downloader](https://github.com/Seo-Rii/Webtoon_Downloader)의 GUI 버전이에요!
 
