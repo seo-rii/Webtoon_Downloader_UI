@@ -24,7 +24,7 @@
     },
     "win": {
       "extraFiles": [
-        "./downloader/**/*"
+        "./downloader.exe"
       ],
       "target": [
         {
